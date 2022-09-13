@@ -5,6 +5,13 @@ class Product:
         self.category_name = category_name
         self.unit_price = unit_price
 
+    def __str__(self):
+        return f"Product name: {self.name} | Category: {self.category_name} | Price: {self.unit_price} PLN"
 
-def print_product(product):
-    print(f"Product name: {product.name} | Category: {product.category_name} | Unit price: {product.unit_price} PLN")
+    def __eq__(self, other):
+        if self.__class__ != other.__class__:
+            return NotImplemented
+
+        return self.name == other.name and \
+            self.category_name == other.category_name and \
+            self.unit_price == other.unit_price
