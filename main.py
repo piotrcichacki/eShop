@@ -1,34 +1,22 @@
-from shop.apple import Apple
-from shop.order import generate_order, Order
+from shop.order import Order
 from shop.order_element import OrderElement
-from shop.potato import Potato
 from shop.product import Product
+from shop.tax_calculator import TaxCalculator
 
 
 def run_example():
 
-    green_apple = Apple(species_name="Green", size="M", price=2.8)
-    print(green_apple)
-    old_potato = Potato(species_name="Potato", size="M", price=3.2)
-    print(old_potato)
+    order = Order.generate_order(number_of_products=20)
+    print(order)
 
     cookie = Product(name="Cookie", category_name="Food", unit_price=4)
-    other_cookie = Product(name="Cookie", category_name="Food", unit_price=4)
-    print("Cookies are equal:", cookie == other_cookie)
+    order.add_product_to_order(cookie, 10)
+    print(order)
 
-    first_order_elements = [
-        OrderElement(product=cookie, quantity=5),
-        OrderElement(product=other_cookie, quantity=4)
-    ]
-    first_order = Order(client_first_name="Piotr", client_last_name="Cichacki", order_elements=first_order_elements)
-    second_order_elements = [
-        OrderElement(product=cookie, quantity=5),
-        OrderElement(product=other_cookie, quantity=4)
-    ]
-    second_order = Order(client_first_name="Piotr", client_last_name="Cichacki", order_elements=second_order_elements)
-    print("Orders are equal: ", first_order == second_order)
-
-    print(first_order)
+    cookies = Product(name="Cookies", category_name="Food", unit_price=9)
+    cookies_order_element = OrderElement(product=cookies, quantity=10)
+    cookies_tax = TaxCalculator.tax_for_order_element(cookies_order_element)
+    print(f"Cookies price: {cookies_order_element.calculate_total_price()} PLN + tax {cookies_tax} PLN")
 
 
 if __name__ == "__main__":
