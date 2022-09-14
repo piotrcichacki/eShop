@@ -19,9 +19,19 @@ class Order:
         if discount_policy is None:
             discount_policy = default_policy
         self.discount_policy = discount_policy
-        self.total_price = self._calculate_total_price()
 
-    def _calculate_total_price(self):
+    @property
+    def order_elements(self):
+        return self._order_elements
+
+    @order_elements.setter
+    def order_elements(self, value):
+        if len(value) > Order.MAX_ORDER_ELEMENTS_NUMBER:
+            value = value[:Order.MAX_ORDER_ELEMENTS_NUMBER]
+        self._order_elements = value
+
+    @property
+    def total_price(self):
         total_price = 0
         for order_element in self._order_elements:
             total_price += order_element.calculate_total_price()
@@ -31,7 +41,6 @@ class Order:
         if len(self._order_elements) < Order.MAX_ORDER_ELEMENTS_NUMBER:
             new_element = OrderElement(product, quantity)
             self._order_elements.append(new_element)
-            self.total_price = self._calculate_total_price()
         else:
             print("Order elements limit has been reached. New product cannot be added.")
 
