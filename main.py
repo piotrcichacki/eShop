@@ -1,4 +1,5 @@
 from shop.data_generator import generate_order_elements
+from shop.discount_policy import AbsoluteDiscount, PercentageDiscount
 from shop.order import Order
 
 
@@ -6,18 +7,17 @@ def run_example():
 
     first_name, last_name = "Piotr", "Cichacki"
     order_elements = generate_order_elements()
-    order = Order(first_name, last_name, order_elements)
+    normal_order = Order(first_name, last_name, order_elements)
 
-    for order_element in order.order_elements:
-        print(order_element)
-    print("Order price:", order.total_price)
+    percentage_discount = PercentageDiscount(discount_percentage=10)
+    percentage_discount_order = Order(first_name, last_name, order_elements, discount_policy=percentage_discount)
 
-    other_order_elements = generate_order_elements()
-    order.order_elements = other_order_elements
+    absolute_discount = AbsoluteDiscount(discount_value=100)
+    absolute_discount_order = Order(first_name, last_name, order_elements, discount_policy=absolute_discount)
 
-    for order_element in order.order_elements:
-        print(order_element)
-    print("Order price:", order.total_price)
+    print(normal_order)
+    print(percentage_discount_order)
+    print(absolute_discount_order)
 
 
 if __name__ == "__main__":
