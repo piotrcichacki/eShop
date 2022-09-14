@@ -1,27 +1,20 @@
-from shop.data_generator import generate_order_elements
-from shop.discount_policy import AbsoluteDiscount, PercentageDiscount
-from shop.order import Order
+from shop.apple import Apple
+from shop.order_element import OrderElement
+from shop.potato import Potato
+from shop.product import Product
 
 
 def run_example():
 
-    order_elements = generate_order_elements()
+    green_apple = Apple(species_name="Green", size="M", price=4.5)
+    old_potato = Potato(species_name="Potato", size="S", price=2.8)
+    print(green_apple)
+    print(old_potato)
 
-    identifier_to_product = {
-        order_element.product.identifier: order_element.product
-        for order_element in order_elements
-    }
-
-    moved_ids_to_product = {
-        identifier + 1: product
-        for identifier, product in identifier_to_product.items()
-    }
-
-    print(identifier_to_product)
-    print(moved_ids_to_product)
-
-    identifier_to_product.update(moved_ids_to_product)
-    print(identifier_to_product)
+    cookies = Product(name="Cookies", category_name="Food", unit_price=2.8, identifier=10)
+    print(cookies)
+    order_element = OrderElement(product=cookies, quantity=8)
+    print(order_element)
 
 
 if __name__ == "__main__":
