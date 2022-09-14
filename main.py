@@ -1,22 +1,34 @@
+import random
+
 from shop.order import Order
 from shop.order_element import OrderElement
 from shop.product import Product
-from shop.tax_calculator import TaxCalculator
+from shop.discount_policy import loyal_customer_policy, christmas_policy
+
+
+def generate_order_elements():
+    order_elements = []
+    for product_number in range(5):
+        product_name = f"Product-{product_number}"
+        category_name = "Others"
+        unit_price = random.randint(1, 30)
+        product = Product(product_name, category_name, unit_price)
+        quantity = random.randint(1, 10)
+        order_elements.append(OrderElement(product, quantity))
+    return order_elements
 
 
 def run_example():
 
-    order = Order.generate_order(number_of_products=20)
-    print(order)
+    first_name, last_name = "Piotr", "Cichacki"
+    order_elements = generate_order_elements()
+    normal_order = Order(first_name, last_name, order_elements)
+    loyal_customer_order = Order(first_name, last_name, order_elements, discount_policy=loyal_customer_policy)
+    christmas_order = Order(first_name, last_name, order_elements, discount_policy=christmas_policy)
 
-    cookie = Product(name="Cookie", category_name="Food", unit_price=4)
-    order.add_product_to_order(cookie, 10)
-    print(order)
-
-    cookies = Product(name="Cookies", category_name="Food", unit_price=9)
-    cookies_order_element = OrderElement(product=cookies, quantity=10)
-    cookies_tax = TaxCalculator.tax_for_order_element(cookies_order_element)
-    print(f"Cookies price: {cookies_order_element.calculate_total_price()} PLN + tax {cookies_tax} PLN")
+    print(normal_order)
+    print(loyal_customer_order)
+    print(christmas_order)
 
 
 if __name__ == "__main__":

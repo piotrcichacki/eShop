@@ -1,5 +1,6 @@
 import random
 
+from shop.discount_policy import default_policy
 from shop.order_element import OrderElement
 from shop.product import Product
 
@@ -8,7 +9,7 @@ class Order:
 
     MAX_ORDER_ELEMENTS_NUMBER = 10
 
-    def __init__(self, client_first_name, client_last_name, order_elements=None):
+    def __init__(self, client_first_name, client_last_name, order_elements=None, discount_policy=None):
         self.client_first_name = client_first_name
         self.client_last_name = client_last_name
 
@@ -17,13 +18,17 @@ class Order:
         if len(order_elements) > Order.MAX_ORDER_ELEMENTS_NUMBER:
             order_elements = order_elements[:Order.MAX_ORDER_ELEMENTS_NUMBER]
         self._order_elements = order_elements
+
+        if discount_policy is None:
+            discount_policy = default_policy
+        self.discount_policy = discount_policy
         self.total_price = self._calculate_total_price()
 
     def _calculate_total_price(self):
         total_price = 0
         for order_element in self._order_elements:
             total_price += order_element.calculate_total_price()
-        return total_price
+        return self.discount_policy(total_price)
 
     def add_product_to_order(self, product, quantity):
         if len(self._order_elements) < Order.MAX_ORDER_ELEMENTS_NUMBER:
