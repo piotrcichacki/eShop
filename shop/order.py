@@ -1,8 +1,5 @@
-import random
-
 from shop.discount_policy import default_policy
 from shop.order_element import OrderElement
-from shop.product import Product
 
 
 class Order:
@@ -65,17 +62,3 @@ class Order:
                 return False
 
         return True
-
-    @classmethod
-    def generate_order(cls, number_of_products):
-        order_elements = []
-        for product_number in range(number_of_products):
-            product_name = f"Product-{product_number}"
-            category_name = "Others"
-            unit_price = random.randint(1, 20)
-            quantity = random.randint(1, 10)
-            order_element = OrderElement(product=Product(product_name, category_name, unit_price), quantity=quantity)
-            order_elements.append(order_element)
-
-        order = Order(client_first_name="Piotr", client_last_name="Cichacki", order_elements=order_elements)
-        return order

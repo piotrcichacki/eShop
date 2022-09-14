@@ -1,21 +1,6 @@
-import random
-
-from shop.order import Order
-from shop.order_element import OrderElement
-from shop.product import Product
+from shop.data_generator import generate_order_elements
 from shop.discount_policy import loyal_customer_policy, christmas_policy
-
-
-def generate_order_elements():
-    order_elements = []
-    for product_number in range(5):
-        product_name = f"Product-{product_number}"
-        category_name = "Others"
-        unit_price = random.randint(1, 30)
-        product = Product(product_name, category_name, unit_price)
-        quantity = random.randint(1, 10)
-        order_elements.append(OrderElement(product, quantity))
-    return order_elements
+from shop.order import Order
 
 
 def run_example():
