@@ -1,18 +1,49 @@
+from enum import Enum
+
 from shop.errors import TemporaryOutOfStock, ProductNotAvailable, NotValidInput
 from shop.order import Order
+from shop.persistance import save_order, load_orders
 from shop.store import Store
+
+
+class Action(Enum):
+    NEW_ORDER = "1"
+    HISTORY = "2"
 
 
 def handle_customer():
     say_hello()
-    order = init_order()
-    while want_more_products():
-        add_product_to_order(order, Store.AVAILABLE_PRODUCTS)
-    print_order_summary(order)
+    selected_action = select_action()
+    if selected_action == Action.NEW_ORDER:
+        order = init_order()
+        while want_more_products():
+            add_product_to_order(order, Store.AVAILABLE_PRODUCTS)
+        print_order_summary(order)
+        save_order(order)
+    else:
+        show_history()
 
 
 def say_hello():
     print("Welcome to our shop!")
+
+
+def select_action():
+    selected_action = input("Do you want to place new order (1) or see your orders history (2)? ")
+    try:
+        return Action(selected_action)
+    except ValueError:
+        print("There are two available options - by default we choose new order ;)")
+        return Action.NEW_ORDER
+
+
+def show_history():
+    first_name = input("What is your first name? ")
+    last_name = input("What is your last name? ")
+    orders = load_orders(first_name, last_name)
+    print("Your orders list:")
+    for order in orders:
+        print(order)
 
 
 def init_order():

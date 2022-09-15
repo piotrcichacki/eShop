@@ -33,5 +33,4 @@ class Store:
                     return
                 else:
                     raise TemporaryOutOfStock(product_name=product.name, available_quantity=available_product.quantity)
-            else:
-                raise ProductNotAvailable(product_name=product.name)
+        raise ProductNotAvailable(product_name=product.name)
