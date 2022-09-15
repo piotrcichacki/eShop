@@ -1,0 +1,54 @@
+{
+    "orders": {
+        "P-C": [
+            {
+                "client_first_name": "P",
+                "client_last_name": "C",
+                "order_elements": [
+                    {
+                        "product": {
+                            "name": "Bread",
+                            "category": "FOOD",
+                            "unit_price": 3.5,
+                            "identifier": 96
+                        },
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "client_first_name": "P",
+                "client_last_name": "C",
+                "order_elements": [
+                    {
+                        "product": {
+                            "name": "Hammer",
+                            "category": "TOOLS",
+                            "unit_price": 35.0,
+                            "identifier": 6
+                        },
+                        "quantity": 1
+                    },
+                    {
+                        "product": {
+                            "name": "Bread",
+                            "category": "FOOD",
+                            "unit_price": 3.5,
+                            "identifier": 96
+                        },
+                        "quantity": 4
+                    },
+                    {
+                        "product": {
+                            "name": "Bike",
+                            "category": "OTHER",
+                            "unit_price": 2500.0,
+                            "identifier": 37
+                        },
+                        "quantity": 1
+                    }
+                ]
+            }
+        ]
+    }
+}
