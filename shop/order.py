@@ -1,5 +1,7 @@
 from shop.discount_policy import DiscountPolicy
 from shop.order_element import OrderElement
+from shop.errors import ElementsInOrderLimitError
+from shop.store import Store
 
 
 class Order:
@@ -12,9 +14,7 @@ class Order:
 
         if order_elements is None:
             order_elements = []
-        if len(order_elements) > Order.MAX_ORDER_ELEMENTS_NUMBER:
-            order_elements = order_elements[:Order.MAX_ORDER_ELEMENTS_NUMBER]
-        self._order_elements = order_elements
+        self.order_elements = order_elements
 
         if discount_policy is None:
             discount_policy = DiscountPolicy()
@@ -27,7 +27,7 @@ class Order:
     @order_elements.setter
     def order_elements(self, value):
         if len(value) > Order.MAX_ORDER_ELEMENTS_NUMBER:
-            value = value[:Order.MAX_ORDER_ELEMENTS_NUMBER]
+            raise ElementsInOrderLimitError(allowed_limit=Order.MAX_ORDER_ELEMENTS_NUMBER)
         self._order_elements = value
 
     @property
@@ -38,11 +38,13 @@ class Order:
         return self.discount_policy.apply_discount(total_price)
 
     def add_product_to_order(self, product, quantity):
-        if len(self._order_elements) < Order.MAX_ORDER_ELEMENTS_NUMBER:
-            new_element = OrderElement(product, quantity)
-            self._order_elements.append(new_element)
-        else:
-            print("Order elements limit has been reached. New product cannot be added.")
+        if len(self._order_elements) >= Order.MAX_ORDER_ELEMENTS_NUMBER:
+            raise ElementsInOrderLimitError(allowed_limit=Order.MAX_ORDER_ELEMENTS_NUMBER,
+                                            message="Order elements limit has been reached. "
+                                                    "New product cannot be added.")
+        Store.reserve_product(product, quantity)
+        new_element = OrderElement(product, quantity)
+        self._order_elements.append(new_element)
 
     def __str__(self):
         mark_line = "-" * 50

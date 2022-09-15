@@ -1,16 +1,23 @@
 from dataclasses import dataclass
+from enum import Enum
+
+
+class ProductCategory(Enum):
+    FOOD = "Food"
+    OTHER = "Others"
+    TOOLS = "Tools"
 
 
 @dataclass
 class Product:
 
     name: str
-    category_name: str
+    category: ProductCategory
     unit_price: float
     identifier: int
 
     def __str__(self):
-        return f"Product name: {self.name} | Category: {self.category_name} | Price: {self.unit_price} PLN"
+        return f"Product name: {self.name} | Category: {self.category.value} | Price: {self.unit_price} PLN"
 
 
 @dataclass
