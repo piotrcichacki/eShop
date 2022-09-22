@@ -1,9 +1,10 @@
 from enum import Enum
+from typing import List
 
 from shop.errors import TemporaryOutOfStock, ProductNotAvailable, NotValidInput
 from shop.order import Order
 from shop.persistance import save_order, load_orders
-from shop.store import Store
+from shop.store import Store, AvailableProduct
 
 
 class Action(Enum):
@@ -11,7 +12,7 @@ class Action(Enum):
     HISTORY = "2"
 
 
-def handle_customer():
+def handle_customer() -> None:
     say_hello()
     selected_action = select_action()
     if selected_action == Action.NEW_ORDER:
@@ -24,11 +25,11 @@ def handle_customer():
         show_history()
 
 
-def say_hello():
+def say_hello() -> None:
     print("Welcome to our shop!")
 
 
-def select_action():
+def select_action() -> Action:
     selected_action = input("Do you want to place new order (1) or see your orders history (2)? ")
     try:
         return Action(selected_action)
@@ -37,7 +38,7 @@ def select_action():
         return Action.NEW_ORDER
 
 
-def show_history():
+def show_history() -> None:
     first_name = input("What is your first name? ")
     last_name = input("What is your last name? ")
     orders = load_orders(first_name, last_name)
@@ -46,13 +47,13 @@ def show_history():
         print(order)
 
 
-def init_order():
+def init_order() -> Order:
     first_name = input("What is your first name? ")
     last_name = input("What is your last name? ")
     return Order(client_first_name=first_name, client_last_name=last_name)
 
 
-def want_more_products():
+def want_more_products() -> bool:
     selection = input("Do you want to add products to order? Y/N: ")
     if selection.upper() != "Y" and selection.upper() != "N":
         print("There are two available options - I assume, that you want ;)")
@@ -60,7 +61,7 @@ def want_more_products():
     return selection.upper() == "Y"
 
 
-def add_product_to_order(order, available_products):
+def add_product_to_order(order: Order, available_products: List[AvailableProduct]) -> None:
     print("Available products:")
     for index, available_product in enumerate(available_products):
         print(f"{index}) {available_product.product}")
@@ -73,7 +74,7 @@ def add_product_to_order(order, available_products):
         quantity = parse_quantity(quantity_str)
     except NotValidInput as input_error:
         print(input_error)
-        return
+        return None
 
     try:
         order.add_product_to_order(available_products[product_index].product, quantity)
@@ -83,7 +84,7 @@ def add_product_to_order(order, available_products):
         print(f"Product {error.product_name} is not available. Choose another.")
 
 
-def parse_product_index(product_index_str, max_index):
+def parse_product_index(product_index_str: str, max_index: int) -> int:
     try:
         product_index = int(product_index_str)
     except ValueError:
@@ -95,7 +96,7 @@ def parse_product_index(product_index_str, max_index):
     return product_index
 
 
-def parse_quantity(quantity_str):
+def parse_quantity(quantity_str: str) -> int:
     try:
         quantity = int(quantity_str)
     except ValueError:
@@ -107,7 +108,7 @@ def parse_quantity(quantity_str):
     return quantity
 
 
-def print_order_summary(order):
+def print_order_summary(order: Order) -> None:
     print("Your order:")
     print(order)
     print("Thank you and see you next time!")

@@ -8,5 +8,5 @@ class Potato:
     size: str
     price: float
 
-    def calculate_price(self, quantity):
+    def calculate_price(self, quantity: int) -> float:
         return self.price * quantity

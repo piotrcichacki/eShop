@@ -9,8 +9,8 @@ class OrderElement:
     product: Product
     quantity: int
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} x {self.quantity}"
 
-    def calculate_total_price(self):
+    def calculate_total_price(self) -> float:
         return self.quantity * self.product.unit_price

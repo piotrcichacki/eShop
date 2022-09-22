@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+from typing import List
 
 from shop.order import Order
 from shop.order_element import OrderElement
@@ -8,7 +9,7 @@ from shop.product import ProductCategory, Product
 from shop.store import AvailableProduct
 
 
-def save_order(order, file_name="orders.json"):
+def save_order(order: Order, file_name: str = "orders.json") -> None:
     new_order_data = {
         "client_first_name": order.client_first_name,
         "client_last_name": order.client_last_name,
@@ -41,7 +42,7 @@ def save_order(order, file_name="orders.json"):
         json.dump({"orders": orders_by_clients_data}, orders_file, indent=4)
 
 
-def load_orders(client_first_name, client_last_name, file_name="orders.json"):
+def load_orders(client_first_name: str, client_last_name: str, file_name: str = "orders.json") -> List[Order]:
     path_to_file = os.path.join("data", file_name)
     try:
         with open(path_to_file, "r") as orders_file:
@@ -70,7 +71,7 @@ def load_orders(client_first_name, client_last_name, file_name="orders.json"):
     ]
 
 
-def load_store(file_name="store.csv"):
+def load_store(file_name: str = "store.csv") -> List[AvailableProduct]:
     path_to_file = os.path.join("data", file_name)
     with open(path_to_file, newline="") as store_file:
         csv_reader = csv.DictReader(store_file)
@@ -78,15 +79,15 @@ def load_store(file_name="store.csv"):
             AvailableProduct(
                 name=row["name"],
                 category=ProductCategory[row["category"]],
-                unit_price=float(row["unit_price"]),
                 identifier=int(row["identifier"]),
+                unit_price=float(row["unit_price"]),
                 quantity=int(row["quantity"]),
             )
             for row in csv_reader
         ]
 
 
-def save_store(available_products, file_name="store.csv"):
+def save_store(available_products: List[AvailableProduct], file_name: str = "store.csv") -> None:
     path_to_file = os.path.join("data", file_name)
     with open(path_to_file, mode="w", newline="") as store_file:
         headers = ["name", "category", "unit_price", "identifier", "quantity"]
